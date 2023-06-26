@@ -1,0 +1,37 @@
+<main class="w-50 form-signin text-start mt-5 mx-auto">
+
+  
+  <h2 class="fw-normal mb-3">Login <i class="fa-regular fa-diamond-exclamation"></i></h2>
+  {{#if loginError}}
+    <div class="alert alert-danger" role="alert">
+      Login
+      {{loginError}}
+    </div>
+  {{/if}}
+  <form action="/login" method="post">
+
+    <div class="form-floating mb-2">
+      <input
+        type="email"
+        class="form-control"
+        id="floatingInput"
+        name="email"
+        placeholder="name@example.com"
+      />
+      <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating">
+      <input
+        type="password"
+        class="form-control"
+        id="floatingPassword"
+        placeholder="Password"
+        name="password"
+      />
+      <label for="floatingPassword">Password</label>
+    </div>
+    <button type="submit" class="btn-lg w-25 float-start btn-primary mt-3">
+      Login
+    </button>
+  </form>
+</main>

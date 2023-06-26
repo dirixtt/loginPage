@@ -1,0 +1,93 @@
+<div class="container">
+  <header>
+    <div
+      class="d-flex flex-column flex-md-row align-items-center py-3 mb-4 border-bottom"
+    >
+      <a
+        href="/"
+        class="d-flex font-bold align-items-center text-dark text-decoration-none"
+      >
+        <img
+          src="https://cdn-icons-png.flaticon.com/128/9706/9706469.png"
+          data-src="https://cdn-icons-png.flaticon.com/128/9706/9706469.png"
+          alt="Робот "
+          title="Робот "
+          width="50"
+          height="50"
+          class="lzy lazyload--done"
+          srcset="https://cdn-icons-png.flaticon.com/128/9706/9706469.png 4x"
+        />
+        <span class="fs-4 ms-2">AI bot</span>
+      </a>
+
+      <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+        {{#if isProducts}}
+          <a class="me-3 py-2 text-dark" href="/products">Product</a>
+        {{else}}
+          <a
+            class="me-3 py-2 text-dark text-decoration-none"
+            href="/products"
+          >Product</a>
+        {{/if}}
+        {{#if isAdd}}
+          <a class="me-3 py-2 text-dark" href="/add">Add</a>
+        {{else}}
+          <a
+            class="me-3 py-2 text-dark text-decoration-none"
+            href="/add"
+          >Add</a>
+        {{/if}}
+
+        <div
+          class="btn-group"
+          role="group"
+          aria-label="Basic mixed styles example"
+        >
+          {{#if token}}
+            <button type="button" class="btn btn-danger active">
+              <a
+                class="text-light text-decoration-none"
+                href="/logout"
+              >Logout</a>
+            </button>
+          {{else}}
+
+            {{#if isLogin}}
+              <button type="button" class="btn active btn-primary">
+                <a
+                  class="text-light text-decoration-none"
+                  href="/login"
+                >Login</a>
+              </button>
+            {{else}}
+              <button type="button" class="btn  btn-primary">
+                <a
+                  class="text-light text-decoration-none active"
+                  href="/login"
+                >Login</a>
+              </button>
+            {{/if}}
+
+            {{#if isRegister}}
+              <button type="button" class="btn active btn-success">
+                <a
+                  class="text-light text-decoration-none"
+                  href="/register"
+                >Register</a>
+              </button>
+            {{else}}
+              <button type="button" class="btn btn-success">
+                <a
+                  class="text-light text-decoration-none active"
+                  href="/register"
+                >Register</a>
+              </button>
+            {{/if}}
+          {{/if}}
+
+        </div>
+      </nav>
+    </div>
+  </header>
+
+</div>
