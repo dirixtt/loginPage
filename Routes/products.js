@@ -9,6 +9,13 @@ router.get('/', (req, res) => {
     
     })
 })
+router.get('/chat', (req, res) => {
+    res.status(200)
+    res.render('./chat-main/index', {
+        title: "AI bot",
+    
+    })
+})
 
 
 router.get('/add', (req, res) => {

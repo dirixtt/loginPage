@@ -1,0 +1,145 @@
+<div class="flex p-2 bg-white h-screen justify-center">
+  <div class="bg-[#a4a4a4] w-[25%]">
+    Bu yerda sizning reklamangiz bo’lishi mumkin!
+  </div>
+  <div class="w-[50%] mx-2 h-full">
+    {{> navbar}}
+    <div class="flex-col h-[89%] bg-[#a4a4a4] p-2 justify-end flex">
+      <div class="overflow-x-hidden pb-2 px-10 w-full justify-center items-center">
+        {{#each messages as |message i|}}
+          <div class="{{#if (eq message.sender 'ChatGPT')}}flex flex-col items-start{{else}}flex flex-col items-end{{/if}}">
+            <div class="{{#if (eq message.sender 'ChatGPT')}}outgoing-message{{else}}incoming-message{{/if}}">
+              <div>
+                <img
+                  class="{{#if (eq message.sender 'ChatGPT')}}outgoing-img{{else}}incoming-img{{/if}}"
+                  src="{{#if (eq message.sender 'ChatGPT')}}{{robotImage}}{{else}}{{humanImage}}{{/if}}"
+                  alt="{{message.sender}}"
+                />
+                {{message.message}}
+              </div>
+              <div>{{message.sentTime}}</div>
+            </div>
+          </div>
+        {{/each}}
+
+        {{#if isTyping}}
+          <div class="typing-container">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+        {{/if}}
+      </div>
+      <div class="w-full flex justify-between h-[45px]">
+        <form class="w-full flex justify-between h-[45px]" onsubmit="handleSend()">
+          <input
+            ref="{{inputRef}}"
+            class="text-black h-full outline-none bg-[#F6EFEF] w-[100%] p-1"
+            placeholder="Type message here"
+            value="{{newMessage}}"
+            onkeypress="handleKeyPress(event)"
+          />
+
+          <button
+            class="outline-none flex items-center justify-center bg-[#641B2D] rounded-none w-[10%]"
+            type="submit"
+            onclick="handleSend()"
+            disabled="{{isTyping}}"
+          >
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-[#a4a4a4] w-[25%]">Google ads</div>
+</div>
+
+<script>
+ let messages = [
+  {
+    message: "Привет, я ChatGPT! Спроси меня что угодно!",
+    sentTime: "только что",
+    sender: "ChatGPT",
+  },
+];
+let isTyping = false;
+let newMessage = "";
+
+const handleSend = async () => {
+  if (!newMessage.trim()) {
+    return;
+  }
+
+  const messageObject = {
+    message: newMessage,
+    sentTime: new Date().toLocaleTimeString(),
+    sender: "user",
+  };
+
+  const newMessages = [...messages, messageObject];
+
+  setMessages(newMessages);
+  setIsTyping(true);
+  await processMessageToChatGPT(newMessages);
+
+  setNewMessage("");
+};
+
+const handleKeyPress = (e) => {
+  if (e.key === "Enter") {
+    handleSend();
+  }
+};
+
+async function processMessageToChatGPT(chatMessages) {
+  let apiMessages = [];
+  // API is expecting objects in the format of { role: "user" or "assistant", "content": "message here" }
+  if (chatMessages) {
+    apiMessages = chatMessages.map((messageObject) => {
+      let role = "";
+      if (messageObject.sender === "ChatGPT") {
+        role = "assistant";
+      } else {
+        role = "user";
+      }
+      return { role: role, content: messageObject.message };
+    });
+  }
+
+  // Get the request body set up with the model we plan to use
+  const apiRequestBody = {
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content: "Объясните вещи, будто вы говорите софтверному специалисту со стажем 2 года.",
+      },
+      ...apiMessages,
+    ],
+  };
+
+  try {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer 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",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(apiRequestBody),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+      // Handle the received data
+    } else {
+      throw new Error("Failed to process message");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+</script>
